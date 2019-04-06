@@ -2,7 +2,7 @@ class AuthController < ApplicationController
     skip_before_action :authorized, only: [:create]
 
 def create
-    @user = User.find_by(name: user_login_params[:name])
+    @user = User.find_by(name: user_login_params[:user_name])
     if @user && @user.authenticate(user_login_params[:password])
         @token = encode_token({user_id: @user.id})
         render json: {user: UserSerializer.new(@user, token: @token)}, status: :authorized
@@ -12,7 +12,7 @@ def create
 end
 
 def user_login_params
-    params.require(:user).permit(:name, :password)
+    params.require(:user).permit(:user_name, :password)
 end
 
 end
