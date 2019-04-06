@@ -34,7 +34,7 @@ before_action :authorized
   end
 
   def authorized
-    render json: { message: 'Please log in' }, status: :unauthorized unless logged_in?
+    render json: { message: 'Please log in', level_data: "[[1]]" }, status: :unauthorized unless logged_in?
   end
 
   def secret
