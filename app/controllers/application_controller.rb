@@ -5,13 +5,13 @@ before_action :authorized
     JWT.encode(payload, secret)
   end
 
-  def auth_headerd
+  def auth_header
     request.headers['Authorization']
   end
 
   def decoded_token
-    if auth_headerd
-      token = auth_headerd 
+    if auth_header
+      token = auth_header
       begin
         JWT.decode(token, secret, true, algorithm: 'HS256')
       rescue JWT::DecodeError
