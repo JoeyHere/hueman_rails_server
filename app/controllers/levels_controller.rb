@@ -39,8 +39,8 @@ class LevelsController < ApplicationController
         else 
             @action.update(completed: true)
         end
-        completed = @level.user_level_actions.filter() {|action| action.completed}
-        @level.update(plays: completed.length()
+        completed = @level.user_level_actions.select {|action| action.completed}
+        @level.update(completes: completed.length())
         render json: @action
     end
 
