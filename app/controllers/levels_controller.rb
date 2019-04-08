@@ -16,6 +16,34 @@ class LevelsController < ApplicationController
         render json: @level
     end
 
+    def played
+        @level = Level.find_by(id: params[:id])
+        @user = User.find_by(id: current_user.id)
+        @action = UserLevelAction.find_by(user_id: @user.id, level_id: @level.id)
+        if !@action
+         @action = UserLevelAction.create(user_id: @user.id, level_id: @level.id, played: 1)
+        else 
+            @action.update(played: @action.played + 1)
+        end
+        plays = @level.user_level_actions.map() {|action| action.played}
+        @level.update(plays: plays.inject(0){|sum,x| sum + x })
+        render json: @action
+    end
+
+    def completed
+        @level = Level.find_by(id: params[:id])
+        @user = User.find_by(id: current_user.id)
+        @action = UserLevelAction.find_by(user_id: @user.id, level_id: @level.id)
+        if !@action
+         @action = UserLevelAction.create(user_id: @user.id, level_id: @level.id, completed: true)
+        else 
+            @action.update(completed: true)
+        end
+        completed = @level.user_level_actions.filter() {|action| action.completed}
+        @level.update(plays: completed.length()
+        render json: @action
+    end
+
     private
 
     def level_params

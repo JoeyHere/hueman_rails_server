@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_08_141449) do
+ActiveRecord::Schema.define(version: 2019_04_08_151245) do
 
   create_table "levels", force: :cascade do |t|
     t.string "name"
@@ -20,6 +20,18 @@ ActiveRecord::Schema.define(version: 2019_04_08_141449) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "published", default: false
+  end
+
+  create_table "user_level_actions", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "level_id"
+    t.integer "played"
+    t.boolean "completed"
+    t.boolean "favourited"
+    t.boolean "upvote"
+    t.boolean "downvote"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
