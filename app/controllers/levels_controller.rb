@@ -12,6 +12,7 @@ class LevelsController < ApplicationController
 
     def create
         @level = Level.create(level_params)
+        @level.update(user_id: current_user.id)
         render json: @level
     end
 

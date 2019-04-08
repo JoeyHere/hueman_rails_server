@@ -15,7 +15,7 @@ before_action :authorized
       begin
         JWT.decode(token, secret, true, algorithm: 'HS256')
       rescue JWT::DecodeError
-        nil
+        return 
       end
     end
   end
