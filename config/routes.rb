@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :user_level_actions
   resources :users
   resources :levels
   post '/login', to: 'auth#create'

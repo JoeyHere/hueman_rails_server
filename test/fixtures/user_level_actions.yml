@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  level_id: 1
+  played: false
+  completed: false
+  favourited: false
+  upvote: false
+  downvote: false
+
+two:
+  user_id: 1
+  level_id: 1
+  played: false
+  completed: false
+  favourited: false
+  upvote: false
+  downvote: false
