@@ -1,7 +1,7 @@
 class LevelsController < ApplicationController
 
     def index 
-        @levels = Level.all 
+        @levels = Level.all
         render json: @levels
     end
 
