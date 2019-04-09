@@ -1,23 +1,28 @@
 class LevelsController < ApplicationController
 
-    skip_before_action :authorized, only: [:index, :show]
+    skip_before_action :authorized, only: [:index, :show, :index]
 
     def index 
-        @levels = Level.all
+        @levels = Level.all.select{ |level| level.completes > 0}
         render json: @levels
     end
 
-      def show
+    def myLevels
+        @levels = current_user.levels
+        render json: @levels
+    end
+
+    def show
         @level = Level.find_by(id: params[:id])
         render json: @level
-        end
+    end
 
     def create
         @level = Level.create(level_params)
         @level.update(user_id: current_user.id)
         render json: @level
     end
-
+    
     def played
         @level = Level.find_by(id: params[:id])
         @user = User.find_by(id: current_user.id)
