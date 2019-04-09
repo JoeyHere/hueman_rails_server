@@ -1,5 +1,7 @@
 class LevelsController < ApplicationController
 
+    skip_before_action :authorized, only: [:index, :show]
+
     def index 
         @levels = Level.all
         render json: @levels
@@ -20,11 +22,11 @@ class LevelsController < ApplicationController
         @level = Level.find_by(id: params[:id])
         @user = User.find_by(id: current_user.id)
         @action = UserLevelAction.find_by(user_id: @user.id, level_id: @level.id)
-        if !@action
-         @action = UserLevelAction.create(user_id: @user.id, level_id: @level.id, played: 1)
-        else 
-            @action.update(played: @action.played + 1)
-        end
+            if !@action
+                    @action = UserLevelAction.create(user_id: @user.id, level_id: @level.id, played: 1)
+            else 
+                @action.update(played: @action.played + 1)
+            end
         plays = @level.user_level_actions.map() {|action| action.played}
         @level.update(plays: plays.inject(0){|sum,x| sum + x })
         render json: @action
@@ -34,11 +36,11 @@ class LevelsController < ApplicationController
         @level = Level.find_by(id: params[:id])
         @user = User.find_by(id: current_user.id)
         @action = UserLevelAction.find_by(user_id: @user.id, level_id: @level.id)
-        if !@action
-         @action = UserLevelAction.create(user_id: @user.id, level_id: @level.id, completed: true)
-        else 
-            @action.update(completed: true)
-        end
+            if !@action
+                @action = UserLevelAction.create(user_id: @user.id, level_id: @level.id, completed: true)
+            else 
+                 @action.update(completed: true)
+            end
         completed = @level.user_level_actions.select {|action| action.completed}
         @level.update(completes: completed.length())
         render json: @action

@@ -6,5 +6,6 @@ Rails.application.routes.draw do
   post '/completed/:id', to: 'levels#completed'
   post '/login', to: 'auth#create'
   get '/profile', to: 'users#profile'
+  post '/signup', to: 'users#create'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

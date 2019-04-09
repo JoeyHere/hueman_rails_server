@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
     before_action :find_user, only: [:show, :edit, :update, :destroy]
+    skip_before_action :authorized, only: [:create]
 
     def profile
         render json: {user: UserSerializer.new(current_user)}, status: :accepted
@@ -8,6 +9,16 @@ class UsersController < ApplicationController
     def index 
         @users = User.all
         render json: @users 
+    end
+
+    def create
+        @user = User.create(user_params)
+        if @user.valid?
+            @token = encode_token(user_id: @user.id)
+            render json: {user: UserSerializer.new(@user), token: @token}, status: :created
+        else
+            render json: {error: "Something went wrong creating new user"}, status: :not_acceptable
+        end
     end
 
     private
