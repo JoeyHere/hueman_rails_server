@@ -1,6 +1,6 @@
 class LevelsController < ApplicationController
 
-    skip_before_action :authorized, only: [:index, :show, :index]
+    skip_before_action :authorized, only: [:index, :show]
 
     def index 
         @levels = Level.all.select{ |level| level.completes > 0}
@@ -20,22 +20,31 @@ class LevelsController < ApplicationController
     def create
         @level = Level.create(level_params)
         @level.update(user_id: current_user.id)
-        render json: @level
+        if @level.valid?
+            render json: @level
+        else
+            render json: {error: "Something went wrong creating level"}, status: :not_acceptable
+        end
     end
     
     def played
         @level = Level.find_by(id: params[:id])
         @user = User.find_by(id: current_user.id)
-        @action = UserLevelAction.find_by(user_id: @user.id, level_id: @level.id)
-            if !@action
+        if @user.id != @level.user_id
+            @action = UserLevelAction.find_by(user_id: @user.id, level_id: @level.id)
+                 if !@action
                     @action = UserLevelAction.create(user_id: @user.id, level_id: @level.id, played: 1)
-            else 
-                @action.update(played: @action.played + 1)
-            end
-        plays = @level.user_level_actions.map() {|action| action.played}
-        @level.update(plays: plays.inject(0){|sum,x| sum + x })
-        render json: @action
+                 else 
+                   @action.update(played: @action.played + 1)
+                  end
+                plays = @level.user_level_actions.map() {|action| action.played}
+                @level.update(plays: plays.inject(0){|sum,x| sum + x })
+                render json: @action
+            else
+                render json:  {message: "Playing own level"}
+        end
     end
+    
 
     def completed
         @level = Level.find_by(id: params[:id])
