@@ -3,7 +3,7 @@ class CreateUserLevelActions < ActiveRecord::Migration[5.2]
     create_table :user_level_actions do |t|
       t.integer :user_id
       t.integer :level_id
-      t.boolean :played
+      t.integer :played
       t.boolean :completed
       t.boolean :favourited
       t.boolean :upvote
