@@ -1,5 +1,6 @@
 User.destroy_all
 Level.destroy_all
+UserLevelAction.destroy_all
 
 user1 = User.create(user_name: "HUEman", password:"hue")
 
