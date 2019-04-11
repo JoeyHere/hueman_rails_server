@@ -17,6 +17,20 @@ class LevelsController < ApplicationController
         render json: @level
     end
 
+    def update
+        @level = Level.find_by(id: params[:id])
+        if @level.user_id == current_user.id 
+            @level.update(level_params)
+                    if @level.valid?
+            render json: @level
+                 else
+            render json: {error: "Something went wrong updating level"}, status: :not_acceptable
+                 end 
+        else
+            render json: {error: "You can't edit other user levels!"}, status: :not_acceptable
+        end
+    end
+
     def create
         @level = Level.create(level_params)
         @level.update(user_id: current_user.id)
@@ -24,6 +38,16 @@ class LevelsController < ApplicationController
             render json: @level
         else
             render json: {error: "Something went wrong creating level"}, status: :not_acceptable
+        end
+    end
+
+    def destroy
+        @level = Level.find_by(id: params[:id])
+        if @level.user_id == current_user.id 
+            @level.destroy()
+             render json: @level
+        else
+            render json: {error: "You can't delete other user levels!"}, status: :not_acceptable
         end
     end
     
