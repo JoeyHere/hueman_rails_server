@@ -1,6 +1,6 @@
 class LevelSerializer < ActiveModel::Serializer
   belongs_to :user
-  attributes :id, :level_data, :user, :name, :plays, :completes
+  attributes :id, :level_data, :user, :name, :plays, :completes, :created_at, :updated_at
   
   class UserSerializer < ActiveModel::Serializer
     attributes :id, :user_name

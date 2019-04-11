@@ -59,9 +59,9 @@ class LevelsController < ApplicationController
                  if !@action
                     @action = UserLevelAction.create(user_id: @user.id, level_id: @level.id, played: 1)
                  else 
-                   @action.update(played: @action.played + 1)
+                   @action.update(played: @action.played ? @action.played + 1 : 1)
                   end
-                plays = @level.user_level_actions.map() {|action| action.played}
+                plays = @level.user_level_actions.map() {|action| action ? action.played : 0}
                 @level.update(plays: plays.inject(0){|sum,x| sum + x })
                 render json: {message: "Added to Plays"}
             else
