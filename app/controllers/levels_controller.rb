@@ -24,7 +24,7 @@ class LevelsController < ApplicationController
                     if @level.valid?
             render json: @level
                  else
-            render json: {error: "Something went wrong updating level"}, status: :not_acceptable
+            render json: {error: "Something went wrong updating level!"}, status: :not_acceptable
                  end 
         else
             render json: {error: "You can't edit other user levels!"}, status: :not_acceptable
@@ -37,7 +37,7 @@ class LevelsController < ApplicationController
         if @level.valid?
             render json: @level
         else
-            render json: {error: "Something went wrong creating level"}, status: :not_acceptable
+            render json: {error: "Something went wrong creating level!"}, status: :not_acceptable
         end
     end
 
