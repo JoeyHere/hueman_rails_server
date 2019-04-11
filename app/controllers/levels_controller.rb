@@ -62,7 +62,7 @@ class LevelsController < ApplicationController
                   end
                 plays = @level.user_level_actions.map() {|action| action ? action.played : 0}
                 plays = plays.inject(0){|sum,x| sum + x }
-                    @level.update(plays: plays.inject(0){|sum,x| sum + x })
+             @level.update(plays: plays)
                 render json: {message: "Added to Plays"}
             else
                 render json:  {message: "Playing own level"}
