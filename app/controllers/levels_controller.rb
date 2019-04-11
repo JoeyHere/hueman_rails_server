@@ -54,15 +54,15 @@ class LevelsController < ApplicationController
     def played
         @level = Level.find_by(id: params[:id])
         if current_user.id != @level.user_id
-            # @action = UserLevelAction.find_by(user_id: current_user.id, level_id: @level.id)
-            #      if @action
-            #         @action.update(played: @action.played ? @action.played + 1 : 1)
-            #      else 
-            #        @action = UserLevelAction.create(user_id: current.id, level_id: @level.id, played: 1)
-            #       end
-            #     plays = @level.user_level_actions.map() {|action| action ? action.played : 0}
-                # @level.update(plays: plays.inject(0){|sum,x| sum + x })
-                @level.update(plays: @level.plays + 1)
+            @action = UserLevelAction.find_by(user_id: current_user.id, level_id: @level.id)
+                 if @action
+                    @action.update(played: @action.played ? @action.played + 1 : 1)
+                 else 
+                   @action = UserLevelAction.create(user_id: current_user.id, level_id: @level.id, played: 1)
+                  end
+                plays = @level.user_level_actions.map() {|action| action ? action.played : 0}
+                plays = plays.inject(0){|sum,x| sum + x }
+                    @level.update(plays: plays.inject(0){|sum,x| sum + x })
                 render json: {message: "Added to Plays"}
             else
                 render json:  {message: "Playing own level"}
