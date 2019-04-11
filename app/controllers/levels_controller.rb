@@ -53,11 +53,10 @@ class LevelsController < ApplicationController
     
     def played
         @level = Level.find_by(id: params[:id])
-        @user = User.find_by(id: current_user.id)
-        if @user.id != @level.user_id
-            @action = UserLevelAction.find_by(user_id: @user.id, level_id: @level.id)
+        if current_user.id != @level.user_id
+            @action = UserLevelAction.find_by(user_id: current_user.id, level_id: @level.id)
                  if !@action
-                    @action = UserLevelAction.create(user_id: @user.id, level_id: @level.id, played: 1)
+                    @action = UserLevelAction.create(user_id: current.id, level_id: @level.id, played: 1)
                  else 
                    @action.update(played: @action.played ? @action.played + 1 : 1)
                   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_09_111336) do
+ActiveRecord::Schema.define(version: 2019_04_11_221337) do
 
   create_table "levels", force: :cascade do |t|
     t.string "name"
@@ -26,11 +26,11 @@ ActiveRecord::Schema.define(version: 2019_04_09_111336) do
   create_table "user_level_actions", force: :cascade do |t|
     t.integer "user_id"
     t.integer "level_id"
-    t.integer "played"
-    t.boolean "completed"
-    t.boolean "favourited"
-    t.boolean "upvote"
-    t.boolean "downvote"
+    t.integer "played", default: 0
+    t.boolean "completed", default: false
+    t.boolean "favourited", default: false
+    t.boolean "upvote", default: false
+    t.boolean "downvote", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
