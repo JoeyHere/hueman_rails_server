@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :levels
   post '/played/:id', to: 'levels#played'
   post '/completed/:id', to: 'levels#completed'
+   patch '/publish/:id', to: 'levels#publish'
   post '/login', to: 'auth#create'
   get '/profile', to: 'users#profile'
   post '/signup', to: 'users#create'
