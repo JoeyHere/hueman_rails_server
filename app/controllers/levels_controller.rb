@@ -37,7 +37,7 @@ class LevelsController < ApplicationController
         if @level.valid?
             render json: @level
         else
-            render json: {error: "Something went wrong creating level!"}, status: :not_acceptable
+            render json: {error: "Level name needs to be between 3 and 30 characters!"}, status: :not_acceptable
         end
     end
 
@@ -97,7 +97,7 @@ class LevelsController < ApplicationController
                 if @level.valid?
                     render json: @level
                  else
-                    render json: {error: "Something went wrong publishing level!"}, status: :not_acceptable
+                    render json: {error: "Level name needs to be between 3 and 30 characters!"}, status: :not_acceptable
                 end 
             else
                 render json: {error: "You can't publish other user levels!"}, status: :not_acceptable
