@@ -3,7 +3,7 @@ class LevelsController < ApplicationController
     skip_before_action :authorized, only: [:index, :show]
 
     def index 
-        @levels = Level.all.select{ |level| level.completes > 0  && level.published}
+        @levels = Level.all.select{ |level| level.published}
         render json: @levels
     end
 
