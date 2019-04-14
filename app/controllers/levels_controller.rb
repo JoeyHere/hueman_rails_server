@@ -72,7 +72,7 @@ class LevelsController < ApplicationController
 
     def completed
         @level = Level.find_by(id: params[:id])
-        if @level.published
+        if current_user.id != @level.user_id && @level.published
         @action = UserLevelAction.find_by(user_id: current_user.id, level_id: @level.id)
             if !@action
                 @action = UserLevelAction.create(user_id: current_user.id, level_id: @level.id, completed: true)
