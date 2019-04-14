@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_11_221337) do
+ActiveRecord::Schema.define(version: 2019_04_14_104023) do
 
   create_table "levels", force: :cascade do |t|
     t.string "name"
@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(version: 2019_04_11_221337) do
     t.datetime "updated_at", null: false
     t.boolean "published", default: false
     t.integer "completes", default: 0
+    t.integer "upvotes", default: 0
+    t.integer "downvotes", default: 0
   end
 
   create_table "user_level_actions", force: :cascade do |t|

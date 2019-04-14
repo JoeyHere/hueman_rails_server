@@ -87,8 +87,43 @@ class LevelsController < ApplicationController
         end
     end
 
-    def publish 
+    def upVote
+        @level = Level.find_by(id: params[:id])
+        if current_user.id != @level.user_id && @level.published
+            @action = UserLevelAction.find_by(user_id: current_user.id, level_id: @level.id)
+                 if @action
+                    @action.update(upvote: true, downvote: false)
+                 else 
+                   @action = UserLevelAction.create(user_id: current_user.id, level_id: @level.id, upvote: true, downvote: false)
+                  end
+                upvotes = @level.user_level_actions.select{|action| action.upvote}
+                downvotes = @level.user_level_actions.select{|action| action.downvote}
+             @level.update(upvotes: upvotes.length, downvotes: downvotes.length)
+                render json: {message: "Added Upvote"}
+            else
+                render json:  {message: "Playing own level"}
+        end
+    end
 
+    def downVote
+        @level = Level.find_by(id: params[:id])
+        if current_user.id != @level.user_id && @level.published
+            @action = UserLevelAction.find_by(user_id: current_user.id, level_id: @level.id)
+                 if @action
+                    @action.update(downvote: true, upvote: false)
+                 else 
+                   @action = UserLevelAction.create(user_id: current_user.id, level_id: @level.id, downvote: true, upvote: false)
+                  end
+                  upvotes = @level.user_level_actions.select{|action| action.upvote}
+                downvotes = @level.user_level_actions.select{|action| action.downvote}
+             @level.update(upvotes: upvotes.length, downvotes: downvotes.length)
+                render json: {message: "Added Downvote"}
+            else
+                render json:  {message: "Playing own level"}
+        end
+    end
+
+    def publish 
          @level = Level.find_by(id: params[:id])
          if @level
             if current_user.id == @level.user_id 
@@ -102,9 +137,7 @@ class LevelsController < ApplicationController
             else
                 render json: {error: "You can't publish other user levels!"}, status: :not_acceptable
             end
-
         else
-      
             @level = Level.create(level_params)
             @level.update(user_id: current_user.id, published: true)
             if @level.valid?
