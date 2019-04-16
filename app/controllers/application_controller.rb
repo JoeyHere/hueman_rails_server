@@ -38,7 +38,7 @@ before_action :authorized
   end
 
   def secret
-    "my very secret secret"
+    ENV["SECRET_KEY_BASE"]
   end
 
 
