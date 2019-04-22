@@ -41,5 +41,4 @@ before_action :authorized
     ENV["SECRET_KEY_BASE"]
   end
 
-
 end
