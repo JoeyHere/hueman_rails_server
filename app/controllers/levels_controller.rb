@@ -1,5 +1,6 @@
 class LevelsController < ApplicationController
 
+    before_action :getLevelFromId, only: [:show, :update, :destroy, :played, :completed, :upVote, :downVote, :publish]
     skip_before_action :authorized, only: [:index, :show]
 
     def index 
@@ -13,12 +14,10 @@ class LevelsController < ApplicationController
     end
 
     def show
-        @level = Level.find_by(id: params[:id])
         render json: @level
     end
 
     def update
-        @level = Level.find_by(id: params[:id])
         if @level.user_id == current_user.id && !@level.published
             @level.update(level_params)
                     if @level.valid?
@@ -42,17 +41,15 @@ class LevelsController < ApplicationController
     end
 
     def destroy
-        @level = Level.find_by(id: params[:id])
         if @level.user_id == current_user.id 
             @level.destroy()
-             render json: @level
+            render json: @level
         else
             render json: {error: "You can't delete other user levels!"}, status: :not_acceptable
         end
     end
     
     def played
-        @level = Level.find_by(id: params[:id])
         if current_user.id != @level.user_id && @level.published
             @action = UserLevelAction.find_by(user_id: current_user.id, level_id: @level.id)
                  if @action
@@ -62,7 +59,7 @@ class LevelsController < ApplicationController
                   end
                 plays = @level.user_level_actions.map() {|action| action ? action.played : 0}
                 plays = plays.inject(0){|sum,x| sum + x }
-             @level.update(plays: plays)
+                @level.update(plays: plays)
                 render json: {message: "Added to Plays"}
             else
                 render json:  {message: "Playing own level"}
@@ -71,24 +68,22 @@ class LevelsController < ApplicationController
     
 
     def completed
-        @level = Level.find_by(id: params[:id])
         if current_user.id != @level.user_id && @level.published
-        @action = UserLevelAction.find_by(user_id: current_user.id, level_id: @level.id)
+            @action = UserLevelAction.find_by(user_id: current_user.id, level_id: @level.id)
             if !@action
                 @action = UserLevelAction.create(user_id: current_user.id, level_id: @level.id, completed: true)
             else 
-                 @action.update(completed: true)
+                @action.update(completed: true)
             end
-        completed = @level.user_level_actions.select {|action| action.completed}
-        @level.update(completes: completed.length())
-        render json: @action
+            completed = @level.user_level_actions.select {|action| action.completed}
+            @level.update(completes: completed.length())
+            render json: @action
         else
             render json: {message: "Playing unpublished level"}
         end
     end
 
     def upVote
-        @level = Level.find_by(id: params[:id])
         if current_user.id != @level.user_id && @level.published
             @action = UserLevelAction.find_by(user_id: current_user.id, level_id: @level.id)
                  if @action
@@ -106,25 +101,23 @@ class LevelsController < ApplicationController
     end
 
     def downVote
-        @level = Level.find_by(id: params[:id])
         if current_user.id != @level.user_id && @level.published
             @action = UserLevelAction.find_by(user_id: current_user.id, level_id: @level.id)
-                 if @action
+                if @action
                     @action.update(downvote: true, upvote: false)
-                 else 
+                else 
                    @action = UserLevelAction.create(user_id: current_user.id, level_id: @level.id, downvote: true, upvote: false)
-                  end
-                  upvotes = @level.user_level_actions.select{|action| action.upvote}
-                downvotes = @level.user_level_actions.select{|action| action.downvote}
-             @level.update(upvotes: upvotes.length, downvotes: downvotes.length)
-                render json: {message: "Added Downvote"}
-            else
-                render json:  {message: "Playing own level"}
+                end
+            upvotes = @level.user_level_actions.select{|action| action.upvote}
+            downvotes = @level.user_level_actions.select{|action| action.downvote}
+            @level.update(upvotes: upvotes.length, downvotes: downvotes.length)
+            render json: {message: "Added Downvote"}
+        else
+            render json:  {message: "Playing own level"}
         end
     end
 
     def publish 
-         @level = Level.find_by(id: params[:id])
          if @level
             if current_user.id == @level.user_id 
                 @level.update(level_params)
@@ -153,6 +146,10 @@ class LevelsController < ApplicationController
 
     def level_params
         params.permit(:name, :level_data, :user_id)
+    end
+
+    def getLevelFromId
+        @level = Level.find_by(id: params[:id])
     end
 
 end
