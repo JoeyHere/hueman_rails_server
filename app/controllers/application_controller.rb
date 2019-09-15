@@ -38,8 +38,8 @@ before_action :authorized
   end
 
   def secret
-    ENV["SECRET_KEY_BASE"]
-    # return "my big secret"
+    # ENV["SECRET_KEY_BASE"]
+    return "my big secret"
   end
 
 end
